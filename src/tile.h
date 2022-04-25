@@ -25,9 +25,11 @@ public:
     map<string, Tile> get_surround();
     Point get_center(){ return center; }
     bool inside_rect(Point rec_start, Point rec_end);
+    bool check_collision(Point p);
 
     HCoords coords;
     bool expanded {false};
+    bool selected{false};
 
 private:
 	Point center;

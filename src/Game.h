@@ -21,5 +21,6 @@ private:
 
 	void setup();
 	void main_loop();
+    void mouse_handler(Vector2& last_pos, int& was_down, Board& b);
 };
 

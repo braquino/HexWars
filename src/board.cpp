@@ -31,6 +31,35 @@ void Board::expand_hex(Tile& t){
 
 void Board::render() {
     for (auto& [key, tile] : this->hexes ) {
-        tile.render();
+        if (!tile.selected) tile.render();
+    }
+    for (auto& [key, tile] : this->hexes ) {
+        if (tile.selected) tile.render();
+    }
+}
+
+void Board::clear_selection(){
+    for (auto& [key, tile] : this->hexes ) {
+        tile.selected = false;
+    }
+}
+
+void Board::select(Point rec_start, Point rec_end, bool add){
+    for (auto& [key, tile] : this->hexes ) {
+        if (tile.inside_rect(rec_start, rec_end)) {
+            tile.selected = true;
+        } else if (!add) {
+            tile.selected = false;
+        }
+    }
+}
+
+void Board::select(Point p, bool add) {
+    if (!add) this->clear_selection();
+    for (auto& [key, tile] : this->hexes ) {
+        if (tile.check_collision(p)) {
+            tile.selected = true;
+            return;
+        }
     }
 }

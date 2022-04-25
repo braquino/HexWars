@@ -13,6 +13,10 @@ public:
     void fill_retangle();
     int size() { return hexes.size(); }
     void render();
+    void select(Point rect_start, Point rect_end, bool add = false);
+    void select(Point p, bool add = false);
+    void clear_selection();
+    Tile get_tile(HCoords coords) { return hexes[coords.to_str()]; }
 
 private:
     Point position_0;
