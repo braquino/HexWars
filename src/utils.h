@@ -1,5 +1,6 @@
 #include<string>
 #include<vector>
+#include<algorithm>
 
 using namespace std;
 
@@ -22,6 +23,10 @@ struct HCoords{
     HCoords operator+(const HCoords& left){
         return HCoords{ x + left.x, y + left.y, z + left.z };
     }
+
+    int dist_from_center(){
+        return max(max(abs(x), abs(y)), abs(z));
+    }
 };
 
 const vector<HCoords> SURROUND_COORDS {
@@ -32,3 +37,4 @@ const vector<HCoords> SURROUND_COORDS {
     HCoords{0, -1, 1},
     HCoords{1, -1, 0}
 };
+
