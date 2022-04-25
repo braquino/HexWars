@@ -18,6 +18,11 @@ public:
         return sqrt(pow(delta.x, 2) + pow(delta.y, 2));
     }
 
+    bool inside_rec(Point rec_start, Point rec_end) {
+        return x >= rec_start.x && y >= rec_start.y &&
+                x <= rec_end.x && y <= rec_end.y;
+    }
+
     Point& move_to(Point* vector) {
         x = vector->x;
         y = vector->y;
@@ -36,6 +41,10 @@ public:
         x += right.x;
         y += right.y;
         return *this;
+    }
+
+    Point operator/(double right) {
+        return Point{x / right, y / right};
     }
 
     bool operator==(const Point& right) const {

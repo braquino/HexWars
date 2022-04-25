@@ -43,3 +43,10 @@ map<string, Tile> Tile::get_surround(){
     return right;
 }
 
+bool Tile::inside_rect(Point rec_start, Point rec_end){
+    for (Point& p : poly) {
+        if (!p.inside_rec(rec_start, rec_end)) return false;
+    }
+    return true;
+}
+

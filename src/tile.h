@@ -24,8 +24,10 @@ public:
 	vector<Point> get_points() { return poly; }
     map<string, Tile> get_surround();
     Point get_center(){ return center; }
+    bool inside_rect(Point rec_start, Point rec_end);
 
     HCoords coords;
+    bool expanded {false};
 
 private:
 	Point center;

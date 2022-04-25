@@ -1,6 +1,6 @@
 #include<string>
 #include "raylib.h"
-#include "tile.h"
+#include "board.h"
 
 using namespace std;
 
