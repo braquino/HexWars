@@ -1,9 +1,11 @@
 #include<cmath>
+#include "raylib.h"
 
 class Point
 {
 public:
-    Point(double x, double y):x(x),y(y){};
+    Point(double x, double y):x(x), y(y){};
+    Point(Vector2 v):x(v.x), y(v.y){};
 
     double x;
     double y;
@@ -12,6 +14,7 @@ public:
     int y_int() { return static_cast<int>(round(y)); }
     float x_f() { return static_cast<float>(x); }
     float y_f() { return static_cast<float>(y); }
+    Vector2 to_vector2() {return Vector2{x_f(), y_f()}; }
 
     double distance(const Point& other) {
         Point delta = this->operator-(other);

@@ -107,4 +107,14 @@ TEST_CASE("TestBoard", "[tests") {
         b.fill_retangle();
         REQUIRE(b.size() == 20);
     }
+
+    SECTION("should select the correct tile"){
+        Board b{Point{5, 5}, 20, 600, 600};
+        b.select(Point(180, 300));
+        // TODO: Fix get_tile and do more tests: select, select rect, and add=true
+        for (auto& p : b.get_tile(HCoords{0, 0, 0}).get_points()) {
+            cout << p.x_int() << ", " << p.y_int() << " --- ";
+        }
+        REQUIRE(b.get_tile(HCoords{0, 1, -1}).selected);
+    }
 }
