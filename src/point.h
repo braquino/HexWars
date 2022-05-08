@@ -1,3 +1,6 @@
+#ifndef POINT_H_
+#define POINT_H_
+
 #include<cmath>
 #include "raylib.h"
 
@@ -32,6 +35,11 @@ public:
         return *this;
     }
 
+    static Point point_from_angle(double alpha, double angle) {
+        double rad = angle * ( PI / 180 );
+        return Point{alpha * cos(rad), alpha * sin(rad)};
+    }
+
     Point operator-(const Point& right) const {
         return Point{ x - right.x, y - right.y };
     }
@@ -55,3 +63,4 @@ public:
     }
 };
 
+#endif

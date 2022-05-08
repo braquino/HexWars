@@ -6,7 +6,7 @@ using namespace std;
 
 class Game {
 public:
-	Game(int width, int height, string name) : 
+    Game(int width, int height, string name) :
 		scr_width{ width }, 
 		scr_height{ height },
 		head_name{ name } {

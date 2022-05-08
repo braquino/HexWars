@@ -25,6 +25,7 @@ file(GLOB SOURCES
 	src/tile.h src/tile.cpp
 	src/Game.h src/Game.cpp
 	src/board.h src/board.cpp
+	src/piece.h src/piece.cpp
 	src/utils.h
 	src/point.h
 )
