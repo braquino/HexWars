@@ -37,4 +37,3 @@ const vector<HCoords> SURROUND_COORDS {
     HCoords{0, -1, 1},
     HCoords{1, -1, 0}
 };
-

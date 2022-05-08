@@ -4,14 +4,23 @@
 
 double t_round(double num) { return round(num * 100) / 100; }
 
-TEST_CASE( "GeneralTests", "[test]" ) {
+TEST_CASE( "GeneralTests") {
     SECTION("should convert HCoords to string"){
         HCoords c{3, -5, 8};
         REQUIRE(c.to_str() == "3:-5:8");
     }
+
+    SECTION("test") {
+        map<string, int> m;
+        m["a"] = 2;
+        int& i = m["a"];
+        cout << i << " " << m["a"] << endl;
+        i = 6;
+        cout << i << " " << m["a"] << endl;
+    }
 }
 
-TEST_CASE("TestPoint", "[test]") {
+TEST_CASE("TestPoint") {
     SECTION("should test Point add"){
         Point a{30, 50};
         Point b{10, 25};
@@ -39,7 +48,7 @@ TEST_CASE("TestPoint", "[test]") {
 
 }
 
-TEST_CASE("TestTile", "[tests]") {
+TEST_CASE("TestTile") {
     SECTION("should calculate poly correctly"){
         Tile t{Point{20, 30}, 10};
         REQUIRE(t.get_points().size() == 6);
@@ -95,7 +104,7 @@ TEST_CASE("TestTile", "[tests]") {
 
 }
 
-TEST_CASE("TestBoard", "[tests") {
+TEST_CASE("TestBoard") {
     SECTION("should calculare the correct tile size") {
         Board b{Point{5, 5}, 40, 400, 1000};
         REQUIRE(t_round(b.get_tile_size()) == 55.56);
@@ -110,11 +119,29 @@ TEST_CASE("TestBoard", "[tests") {
 
     SECTION("should select the correct tile"){
         Board b{Point{5, 5}, 20, 600, 600};
-        b.select(Point(180, 300));
-        // TODO: Fix get_tile and do more tests: select, select rect, and add=true
-        for (auto& p : b.get_tile(HCoords{0, 0, 0}).get_points()) {
-            cout << p.x_int() << ", " << p.y_int() << " --- ";
-        }
+        b.fill_retangle();
+        b.select(Point(310, 410));
+        // TODO: add more tests: select, select rect, and add=true
         REQUIRE(b.get_tile(HCoords{0, 1, -1}).selected);
+    }
+}
+
+TEST_CASE("Test piece") {
+    SECTION("should set a piece to a tile"){
+        Piece p{Point{50, 50}, 15};
+        Tile t{Point{20, 30}, 45};
+        t.set_piece(&p);
+        REQUIRE(t.get_piece() != nullptr);
+        REQUIRE(t.get_piece()->get_center() == t.get_center());
+        REQUIRE(t.get_piece()->get_size() == 45);
+    }
+
+    SECTION("should set a piece to a tile of a board"){
+        Board b{Point{5, 5}, 20, 600, 600};
+        b.fill_retangle();
+        Piece p;
+        b.set_piece(&p, HCoords{0, 1, -1}.to_str());
+        REQUIRE(b.get_tile(HCoords{0, 1, -1}).get_piece() != nullptr);
+        REQUIRE(b.get_tile("0:1:-1").get_piece()->get_size() == 69);
     }
 }

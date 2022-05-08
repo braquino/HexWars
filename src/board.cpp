@@ -33,8 +33,9 @@ void Board::render() {
     for (auto& [key, tile] : this->hexes ) {
         if (!tile.selected) tile.render();
     }
+    Color select_border = (this->bad_selection) ? RED : GREEN;
     for (auto& [key, tile] : this->hexes ) {
-        if (tile.selected) tile.render();
+        if (tile.selected) tile.render(select_border);
     }
 }
 
@@ -44,22 +45,78 @@ void Board::clear_selection(){
     }
 }
 
+bool Board::selectable(Tile& t) {
+    return !((this->selection_mode == SelectionMode::OnlyPieces || this->selection_mode == SelectionMode::OnlyLinkedPieces)
+             && t.get_piece() == nullptr);
+}
+
+void Board::bad_selection_check() {
+    if (this-> num_selected > 1 &&
+            (this->selection_mode == SelectionMode::OnlyLinkedTiles || this->selection_mode == SelectionMode::OnlyLinkedPieces)){
+        vector<Tile*> sel;
+        bool right = true;
+        for (auto& [key, tile] : this->hexes ) { if (tile.selected) sel.push_back(&tile); }
+        for (Tile* t1 : sel) {
+            bool one_linked = false;
+            for (Tile* t2 : sel) {
+                double dist = t1->get_center().distance(t2->get_center());
+                if (dist > 0.1){
+                    one_linked |= dist < t1->get_size() * 2.2;
+                }
+            }
+            right &= one_linked;
+        }
+        this->bad_selection = !right;
+    } else {
+        this->bad_selection = false;
+    }
+
+}
+
 void Board::select(Point rec_start, Point rec_end, bool add){
+    if (!add) this->num_selected = 0;
     for (auto& [key, tile] : this->hexes ) {
         if (tile.inside_rect(rec_start, rec_end)) {
-            tile.selected = true;
+            tile.selected = this->selectable(tile);
+            if (tile.selected) this->num_selected++;
         } else if (!add) {
             tile.selected = false;
         }
     }
+    this->bad_selection_check();
 }
 
 void Board::select(Point p, bool add) {
-    if (!add) this->clear_selection();
+    if (!add) {
+        this->clear_selection();
+        this->num_selected = 0;
+    }
     for (auto& [key, tile] : this->hexes ) {
         if (tile.check_collision(p)) {
-            tile.selected = true;
+            if (tile.selected && add){
+                tile.selected = false;
+                this->num_selected--;
+            } else {
+                tile.selected = this->selectable(tile);
+                if (tile.selected) this->num_selected++;
+            }
+            this->bad_selection_check();
             return;
         }
     }
+    this->bad_selection_check();
+}
+
+vector<string> Board::get_coords() {
+    vector<string> right;
+    for (auto& [key, tile] : this->hexes ) {
+        right.push_back(key);
+    }
+    return right;
+}
+
+Tile& Board::get_tile(string coords) {
+    auto iter = this->hexes.find(coords);
+    if (iter != this->hexes.end()) return iter->second;
+    else throw out_of_range("This coords: " + coords + " doesn't belong to this Board");
 }
